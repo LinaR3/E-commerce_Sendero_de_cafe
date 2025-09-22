@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - Sendero de Café{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:product_list_by_category' product.category.slug %}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+            {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center rounded shadow" style="height: 400px;">
+                <i class="fas fa-coffee fa-5x text-muted"></i>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1 class="display-5">{{ product.name }}</h1>
+            <p class="lead text-muted">{{ product.category.name }}</p>
+            
+            <!-- Product Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong><i class="fas fa-map-marker-alt text-coffee"></i> Origen:</strong><br>
+                            <span class="text-muted">{{ product.origin }}</span>
+                        </div>
+                        <div class="col-6">
+                            <strong><i class="fas fa-fire text-coffee"></i> Tueste:</strong><br>
+                            <span class="text-muted">{{ product.get_roast_level_display }}</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong><i class="fas fa-leaf text-coffee"></i> Tipo:</strong><br>
+                            <span class="text-muted">{{ product.get_coffee_type_display }}</span>
+                        </div>
+                        <div class="col-6">
+                            <strong><i class="fas fa-weight text-coffee"></i> Peso:</strong><br>
+                            <span class="text-muted">{{ product.weight }}g</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price and Stock -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="price mb-0">${{ product.price|floatformat:0 }}</h2>
+                    {% if product.stock > 0 %}
+                        <span class="badge bg-success fs-6">
+                            <i class="fas fa-check"></i> {{ product.stock }} en stock
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger fs-6">
+                            <i class="fas fa-times"></i> Agotado
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Add to Cart Form -->
+            {% if product.available and product.stock > 0 %}
+            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-4">
+                {% csrf_token %}
+                <div class="row align-items-end">
+                    <div class="col-4">
+                        <label for="quantity" class="form-label">Cantidad:</label>
+                        <input type="number" name="quantity" id="quantity" min="1" max="{{ product.stock }}" value="1" class="form-control">
+                    </div>
+                    <div class="col-8">
+                        <button type="submit" class="btn btn-coffee btn-lg w-100">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" name="override" value="False">
+            </form>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Este producto no está disponible actualmente.
+            </div>
+            {% endif %}
+
+            <!-- Social Share -->
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="fab fa-facebook-f"></i> Compartir
+                </button>
+                <button class="btn btn-outline-info btn-sm">
+                    <i class="fab fa-twitter"></i> Tweet
+                </button>
+                <button class="btn btn-outline-success btn-sm">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Description -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="productTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#description">Descripción</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#reviews">Reseñas ({{ reviews.count }})</a>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-3">
+                <div class="tab-pane fade show active" id="description">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>{{ product.description|linebreaks }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="reviews">
+                    <div class="card">
+                        <div class="card-body">
+                            {% if reviews %}
+                            {% for review in reviews %}
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h6>{{ review.user.first_name|default:review.user.username }}</h6>
+                                    <div class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star"></i>
+                                        {% else %}
+                                        <i class="far fa-star"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="text-muted mb-1">{{ review.comment }}</p>
+                                <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <p class="text-muted">Aún no hay reseñas para este producto.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Productos Relacionados</h3>
+            <div class="row">
+                {% for related_product in product.category.products.all|slice:":4" %}
+                {% if related_product != product %}
+                <div class="col-md-3 mb-3">
+                    <div class="card card-product h-100">
+                        {% if related_product.image %}
+                        <img src="{{ related_product.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-coffee fa-2x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-title">{{ related_product.name }}</h6>
+                            <p class="price">${{ related_product.price|floatformat:0 }}</p>
+                            <a href="{{ related_product.get_absolute_url }}" class="btn btn-coffee btn-sm">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.text-coffee {
+    color: #8B4513 !important;
+}
+</style>
+{% endblock %}
