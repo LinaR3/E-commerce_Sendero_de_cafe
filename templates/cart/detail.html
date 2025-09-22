@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Carrito de Compras - Sendero de Café{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="fas fa-shopping-cart"></i> Tu Carrito de Compras</h2>
+            <hr>
+        </div>
+    </div>
+
+    {% if cart %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Productos en tu carrito</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                            <img src="{{ item.product.image.url }}" class="me-3 rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                            <div class="me-3 bg-light d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
+                                                <i class="fas fa-coffee text-muted"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-0">{{ item.product.name }}</h6>
+                                                <small class="text-muted">{{ item.product.category.name }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="fw-bold">${{ item.price|floatformat:0 }}</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <form action="{% url 'cart:cart_add' item.product.id %}" method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            {{ item.update_quantity_form.quantity }}
+                                            {{ item.update_quantity_form.override }}
+                                            <button type="submit" class="btn btn-sm btn-outline-primary ms-1">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="fw-bold text-coffee">${{ item.total_price|floatformat:0 }}</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <form action="{% url 'cart:cart_remove' item.product.id %}" method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de eliminar este producto?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Resumen del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Productos ({{ cart|length }})</span>
+                        <span>${{ cart.get_total_price|floatformat:0 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Envío</span>
+                        <span class="text-success">Gratis</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total</strong>
+                        <strong class="text-coffee">${{ cart.get_total_price|floatformat:0 }}</strong>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'orders:order_create' %}" class="btn btn-coffee btn-lg w-100 mb-2">
+                        <i class="fas fa-credit-card"></i> Proceder al Checkout
+                    </a>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}?next={% url 'orders:order_create' %}" class="btn btn-coffee btn-lg w-100 mb-2">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión para Comprar
+                    </a>
+                    {% endif %}
+                    
+                    <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-arrow-left"></i> Continuar Comprando
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="card mt-3">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Compra Segura</h6>
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <i class="fas fa-shipping-fast fa-2x text-coffee mb-2"></i>
+                            <small class="d-block">Envío Gratis</small>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-shield-alt fa-2x text-coffee mb-2"></i>
+                            <small class="d-block">Compra Segura</small>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-undo fa-2x text-coffee mb-2"></i>
+                            <small class="d-block">Devoluciones</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3>Tu carrito está vacío</h3>
+                <p class="text-muted mb-4">¡Agrega algunos productos para comenzar tu compra!</p>
+                <a href="{% url 'products:product_list' %}" class="btn btn-coffee btn-lg">
+                    <i class="fas fa-coffee"></i> Explorar Productos
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.text-coffee {
+    color: #8B4513 !important;
+}
+</style>
+{% endblock %}
