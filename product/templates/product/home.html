@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sendero de Café</title>
+    <link rel="stylesheet" href="/static/css/styles.css"> 
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">Sendero de Café</a>
+            <ul>
+                <li><a href="#">Tienda</a></li>
+                <li><a href="#">Nuestra historia</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-carousel">
+            <div class="carousel-container">
+                <div class="carousel-item active">
+                    <img src="{% static 'images/hero1.jpg' %}" alt="Café recién tostado">
+                    <div class="carousel-caption">
+                        <h1>Descubre el sabor auténtico</h1>
+                        <p>Cultivado con cuidado, tostado con arte.</p>
+                        <a href="#" class="btn-light-custom"> Compra ahora</a>
+                    </div>
+                </div>
+                
+                <div class="carousel-item">
+                    <img src="{% static 'images/hero7.jpg' %}" alt="El arte de la preparación">
+                    <div class="carousel-caption">
+                        <h1>El arte en cada taza</h1>
+                        <p>Nuestra selección te sorprenderá con cada sorbo.</p>
+                        <a href="#" class="btn-light-custom">Nuestra historia</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'images/hero6.jpg' %}" alt="El arte de la preparación">
+                    <div class="carousel-caption">
+                        <h1>Un despertar para el alma.</h1>
+                        <p>Selección artesanal. Sabor inolvidable</p>
+                        <a href="#" class="btn-light-custom">Beneficios de nuestros productos</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'images/hero5.jpg' %}" alt="El arte de la preparación">
+                    <div class="carousel-caption">
+                        <h1>El aroma que te encuentra.</h1>
+                        <p>Donde cada grano cuenta una historia.</p>
+                        <a href="#" class="btn-light-custom">Beneficios de nuestros productos</a>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="prev" aria-label="Anterior">&#10094;</button>
+            <button class="next" aria-label="Siguiente">&#10095;</button>
+        </section>
+        <section class="featured-products">
+            <h2>Nuestros productos</h2>
+            <div class="product-grid">
+                <article class="product-card">
+                    <img src="https://via.placeholder.com/300" alt="Café molido">
+                    <h3>Café Molido Colombia Antioquia</h3>
+                    <p class="price">$80USD</p>
+                    <a href="#" class="btn-secondary">Ver producto</a>
+                </article>
+                
+                <article class="product-card">
+                    <img src="https://via.placeholder.com/300" alt="Granos de café">
+                    <h3>Granos de Café Colombia Tolima</h3>
+                    <p class="price">$100USD</p>
+                    <a href="#" class="btn-secondary">Ver producto</a>
+                </article>
+            </div>
+        </section>
+        
+        <section class="about-us">
+            <h2>Nuestra historia</h2>
+            <p>En Sendero de Café, nos dedicamos a seleccionar los mejores granos de las fincas más exóticas para llevarte una experiencia inigualable en cada sorbo.</p>
+            <a href="#" class="btn-secondary">Saber más</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sendero de Café. Todos los derechos reservados.</p>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+        </div>
+    </footer>
+    
+    <script src="{% static 'js/carousel.js' %}"></script>
+
+</body>
+</html>

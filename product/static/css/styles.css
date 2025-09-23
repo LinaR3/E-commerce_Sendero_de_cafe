@@ -1,0 +1,210 @@
+/* Base de estilos y tipografía */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f7f5f2;
+}
+
+/* Encabezado y navegación */
+header {
+    background-color: #fff;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #1e1e1e;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #c09f8c;
+}
+
+/* Sección del carrusel (Banner Hero) */
+.hero-carousel {
+    position: relative;
+    max-width: 100vw; /* Asegura que el carrusel ocupe todo el ancho de la pantalla */
+    overflow: hidden;
+}
+
+.carousel-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%;
+    position: relative;
+    height: 70vh; /* Ajusta la altura del banner */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    max-width: 800px; /* Limita el ancho del texto para mejor legibilidad */
+}
+
+/* Oculta los elementos que no son el activo con opacidad para una transición suave */
+.carousel-item:not(.active) {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* El elemento activo */
+.carousel-item.active {
+    opacity: 1;
+}
+
+/* Estilos para los botones de navegación */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    padding: 1rem;
+    color: white;
+    font-weight: bold;
+    font-size: 2rem;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: rgba(0,0,0,0.5);
+    border: none;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.prev {
+    left: 0;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Productos destacados */
+.featured-products, .about-us {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1e1e1e;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding-bottom: 1.5rem;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.product-card h3 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.25rem;
+    color: #1e1e1e;
+}
+
+.product-card .price {
+    font-weight: bold;
+    color: #6a493b;
+}
+
+/* Pie de página */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background-color: #e5e3e1;
+    color: #888;
+}
+
+.social-links a {
+    color: #888;
+    margin: 0 0.5rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #1e1e1e;
+}
+
+.btn-light-custom {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+    background-color: #f8f9fa; 
+    color: #212529; 
+    border: 1px solid #ced4da; 
+}
+
+.btn-light-custom:hover {
+    background-color: #e2e6ea; 
+    border-color: #dae0e5;
+}
