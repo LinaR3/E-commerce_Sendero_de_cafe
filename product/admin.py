@@ -3,6 +3,6 @@ from .models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "stock", "created_at", "updated_at")
+    list_display = ("name", "price", "stock", "created_at")
     search_fields = ("name", "description")
     list_filter = ("created_at",)

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def home(request):
-    return HttpResponse("Bienvenida a Sendero de Café ☕🌱")
+    return render(request, 'product/home.html')
